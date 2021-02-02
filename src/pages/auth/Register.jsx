@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../../config/firebase";
+import { Button } from "antd";
+import { useSelector } from "react-redux";
 
-export default function Register() {
+export default function Register({ history }) {
   const [email, setEmail] = useState("");
+
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) history.push("/");
+  }, [history, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,11 +41,13 @@ export default function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoFocus
+          placeholder="Enter your email address"
         />
 
-        <button type="submit" className="btn btn-raised">
+        <br />
+        <Button type="primary" className="btn btn-raised" block shape="round">
           Register
-        </button>
+        </Button>
       </form>
     </>
   );
